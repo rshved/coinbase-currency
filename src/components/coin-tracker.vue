@@ -1,15 +1,11 @@
 <template>
-  <div v-for="prop in allCoins.BTC">
-    {{prop}}
+  <div v-for="coin in allCoins">
+    <div v-for="prop in coin">
+      {{ prop }}
+    </div>
   </div>
-  <div v-for="prop in allCoins.ETH">
-    {{prop}}
-  </div>
-  <input type="text" v-model="searchedCoin" @keydown.enter="getPrice(searchedCoinPair)">
+  <input v-model="searchedCoin" type="text" @keydown.enter="getPrice(searchedCoinPair)">
   <button @click="getPrice(searchedCoinPair)">Search</button>
-  <div v-for="prop in allCoins.otherCoin">
-    {{prop}}
-  </div>
 </template>
 
 <script setup lang="ts">

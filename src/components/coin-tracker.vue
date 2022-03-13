@@ -1,7 +1,7 @@
 <template>
   <div v-for="coin in allCoins">
-    <div v-for="prop in coin">
-      {{ prop }}
+    <div v-for="property in coin">
+      {{ property }}
     </div>
   </div>
   <input v-model="searchedCoin" type="text" @keydown.enter="getPrice(searchedCoinPair)">

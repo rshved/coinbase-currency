@@ -1,11 +1,17 @@
 <template>
-  <div v-for="coin in allCoins">
-    <div v-for="property in coin">
-      {{ property }}
+  <div class="coins-wrap">
+    <div v-for="coin in allCoins">
+      <p v-for="property in coin">
+        {{ property }}
+      </p>
     </div>
+    <div>
+      <input v-model="searchedCoin" type="text" @keydown.enter="getPrice(searchedCoinPair)">
+      <button @click="getPrice(searchedCoinPair)">Search</button>
+    </div>
+
   </div>
-  <input v-model="searchedCoin" type="text" @keydown.enter="getPrice(searchedCoinPair)">
-  <button @click="getPrice(searchedCoinPair)">Search</button>
+
 </template>
 
 <script setup lang="ts">
@@ -38,3 +44,10 @@ onMounted(() => {
 })
 
 </script>
+
+<style lang="scss" scoped>
+.coins-wrap {
+  display: flex;
+  justify-content: space-around;
+}
+</style>

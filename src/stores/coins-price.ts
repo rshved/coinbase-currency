@@ -13,21 +13,17 @@ interface coins {
 export const useCoinsPriceStore = defineStore({
   id: 'coins-price',
   state: () => ({
-    allCoins: {
-      BTC: {} as coinFormat,
-      ETH: {} as coinFormat,
-      otherCoin: {} as coinFormat
-    } as coins,
+    allCoins: {} as coins,
   }),
-  getters: {
 
-  },
+  getters: {},
+
   actions: {
     async getPrice(payload: string) {
 
-      const { data } = await (await fetch(`https://api.coinbase.com/v2/prices/${payload}/spot`)).json()
+      const { data } = await (await fetch(`https://api.coinbase.com/v2/prices/${payload}/buy`)).json()
 
-      const coin = {
+      this.allCoins[data.base] = {
         money: parseFloat(data.amount),
         formatted: new Intl.NumberFormat('en-us',{
           style: 'currency',
@@ -35,9 +31,6 @@ export const useCoinsPriceStore = defineStore({
         }).format(data.amount),
         name: data.base
       }
-
-      if (this.allCoins[data.base]) this.allCoins[data.base] = coin
-      else this.allCoins.otherCoin = coin
-    },
+    }
   }
 })

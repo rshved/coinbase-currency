@@ -10,57 +10,51 @@
     <h3>
       Last Update: {{dateNow}}
     </h3>
+    <button @click="store.$reset()">Reset</button>
   </div>
-
 
 </template>
 
 <script setup lang="ts">
-
-import {ref, computed, onMounted, onBeforeUnmount, watch} from "vue";
-
+import {ref, computed, onMounted, onBeforeUnmount} from "vue";
 import { storeToRefs } from "pinia";
 import { useCoinsPriceStore } from "@/stores/coins-price";
 
 import CoinCheck from '@/components/certain-coin.vue'
 
-defineProps<{
-  pair?: string,
-  background: string
-}>()
-
 const store = useCoinsPriceStore()
 const { getPrice } = store
 const { allCoins } = storeToRefs(store)
-
-const searchedCoin = ref('')
-const searchedCoinPair = computed(() => {
-  return searchedCoin.value.toUpperCase() + '-USD'
-})
-const lastSearchedCoin = ref('')
 
 const btcPair = "BTC-USD"
 const ethPair = "ETH-USD"
 const dateNow = ref('')
 
-const searchCoin = () => {
-  getPrice(searchedCoinPair.value)
-  lastSearchedCoin.value = searchedCoinPair.value
-}
 onMounted(() => {
   getPrice(btcPair)
   getPrice(ethPair)
-  dateNow.value =  new Date().toLocaleString()
+  dateNow.value = new Date().toLocaleString()
 })
 
 const latestInfo = setInterval(() => {
-  getPrice(btcPair)
-  getPrice(ethPair)
-  if (allCoins.value.otherCoin.formatted) getPrice(lastSearchedCoin.value)
-  dateNow.value =  new Date().toLocaleString()
-}, 30000)
+  for (const coin in allCoins.value) {
+    getPrice(`${coin}-USD`)
+  }
+  dateNow.value = new Date().toLocaleString()
+}, 5000)
 
 onBeforeUnmount(() => clearInterval(latestInfo))
+
+//Search
+const searchedCoin = ref('')
+const searchedCoinPair = computed(() => {
+  return searchedCoin.value.toUpperCase() + '-USD'
+})
+
+const searchCoin = () => {
+  getPrice(searchedCoinPair.value)
+  searchedCoin.value = ''
+}
 </script>
 
 <style lang="scss" scoped>

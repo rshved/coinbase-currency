@@ -10,6 +10,7 @@ interface coins {
   [key: string]: coinFormat
 }
 
+
 export const useCoinsPriceStore = defineStore({
   id: 'coins-price',
   state: () => ({

@@ -16,7 +16,7 @@
 </template>
 
 <script setup lang="ts">
-import {ref, computed, onMounted, onBeforeUnmount} from "vue";
+import {ref, computed, onMounted, onBeforeUnmount, nextTick} from "vue";
 import { storeToRefs } from "pinia";
 import { useCoinsPriceStore } from "@/stores/coins-price";
 
@@ -34,10 +34,26 @@ onMounted(() => {
   getPrice(btcPair)
   getPrice(ethPair)
   dateNow.value = new Date().toLocaleString()
+
 })
+/* just for fun */
+// const iterator = function* (val: object) {
+//   const obj = Object.keys(val)
+//
+//   for (let i = 0; i < obj.length; i++) {
+//     yield obj[i]
+//   }
+// }
+//
+// const latestInfo = setInterval(() => {
+//   for (const coin of iterator(allCoins.value)) {
+//     getPrice(`${coin}-USD`)
+//   }
+//   dateNow.value = new Date().toLocaleString()
+// }, 10000)
 
 const latestInfo = setInterval(() => {
-  for (const coin in allCoins.value) {
+  for (const coin of Object.keys(allCoins.value)) {
     getPrice(`${coin}-USD`)
   }
   dateNow.value = new Date().toLocaleString()
